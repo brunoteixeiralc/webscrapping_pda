@@ -22,8 +22,6 @@ json_res = response.json()
 
 res = []
 
-# print(json_res["products"])
-
 for i in json_res["products"]:
     discount = "Same price" 
     if "desconto" in i["skus"][0]["specs"]:
@@ -38,4 +36,4 @@ for i in json_res["products"]:
     
 df = pd.json_normalize(res)
 df = pd.DataFrame(df) 
-df.to_csv("pao_acucar.csv", encoding="utf-8", index=False, sep=";")   
+df.to_csv("desc_pda_cerva.csv", encoding="utf-8", index=False, sep=";")   
