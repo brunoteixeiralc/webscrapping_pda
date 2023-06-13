@@ -25,7 +25,7 @@ res = []
 # print(json_res["products"])
 
 for i in json_res["products"]:
-    discount = "Same price"
+    discount = "Same price" 
     if "desconto" in i["skus"][0]["specs"]:
         discount = i["skus"][0]["specs"]["desconto"][0]
         
