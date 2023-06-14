@@ -1,5 +1,12 @@
 import requests
+import base64
 import pandas as pd
+import sendgrid
+from sendgrid.helpers.mail import (
+    Mail, Content, To, Email, Attachment, FileContent, FileName,
+    FileType, Disposition)
+from io import BytesIO
+from decouple import config
 
 url = "https://api.linximpulse.com/engage/search/v3/hotsites"
 
@@ -36,4 +43,37 @@ for i in json_res["products"]:
     
 df = pd.json_normalize(res)
 df = pd.DataFrame(df) 
-df.to_csv("desc_pda_cerva.csv", encoding="utf-8", index=False, sep=";")   
+df.to_csv("desc_pda_cerva.csv", encoding="utf-8", index=False, sep=";")
+
+def send_email():
+    
+    buffer = BytesIO()
+    df.to_csv(buffer);
+    buffer.seek(0)
+    data = buffer.read()
+    encoded = base64.b64encode(data).decode()
+    
+    attachment = Attachment()
+    attachment.file_content = FileContent(encoded)
+    attachment.file_type = FileType('text/csv')
+    attachment.file_name = FileName('desc_pda_cerva.csv')
+    attachment.disposition = Disposition('attachment')
+    
+    sg = sendgrid.SendGridAPIClient(api_key=config('SENDGRID_API_KEY'))
+    from_email = Email("brunoteixeiralc@gmail.com")  # Change to your verified sender
+    to_email = To("brunoteixeiralc@gmail.com")
+    subject = "Descontos Cervejas Artesanais - PDA"
+    content = Content("text/plain", "Segue em anexo as 12 cervejas artesanais com maior desconto no PDA")
+    mail = Mail(from_email, to_email, subject, content)
+    mail.attachment = attachment
+
+
+    # Get a JSON-ready representation of the Mail object
+    mail_json = mail.get()
+
+    # Send an HTTP POST request to /mail/send
+    response = sg.client.mail.send.post(request_body=mail_json)
+   
+    print('Email enviado')
+    
+send_email()
