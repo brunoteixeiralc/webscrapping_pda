@@ -45,7 +45,11 @@ df = pd.json_normalize(res)
 df = pd.DataFrame(df) 
 df.to_csv("desc_pda_cerva.csv", encoding="utf-8", index=False, sep=";")
 
-def send_email():
+def send_email(res):
+    
+    contentEmailBody1 = res[0]["name"] + " , Preço com desc: " + str(res[0]["price"]) + " , Preço normal: " + str(res[0]["old_price"])
+    contentEmailBody2 = res[1]["name"] + " , Preço com desc: " + str(res[1]["price"]) + " , Preço normal: " + str(res[1]["old_price"])
+    contentEmailBody3 = res[2]["name"] + " , Preço com desc: " + str(res[2]["price"]) + " , Preço normal: " + str(res[2]["old_price"])
     
     buffer = BytesIO()
     df.to_csv(buffer);
@@ -63,10 +67,13 @@ def send_email():
     from_email = Email("brunoteixeiralc@gmail.com")  # Change to your verified sender
     to_email = To("brunoteixeiralc@gmail.com")
     subject = "Descontos Cervejas Artesanais - PDA"
-    content = Content("text/plain", "Segue em anexo as 12 cervejas artesanais com maior desconto no PDA")
+    content = Content("text/plain", "Segue em anexo as 12 cervejas artesanais com maior desconto no PDA\n\n" + "TOP 3 DE DESCONTO\n\n" +
+                      str(contentEmailBody1) + 
+                      "\n" + str(contentEmailBody2) + 
+                      "\n" + str(contentEmailBody3)
+                      ) 
     mail = Mail(from_email, to_email, subject, content)
     mail.attachment = attachment
-
 
     # Get a JSON-ready representation of the Mail object
     mail_json = mail.get()
@@ -76,4 +83,4 @@ def send_email():
    
     print('Email enviado')
     
-send_email()
+send_email(res)
