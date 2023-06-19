@@ -9,7 +9,7 @@ from sendgrid.helpers.mail import (
 from io import BytesIO
 from decouple import config
 
-locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+locale.setlocale(locale.LC_ALL, '')
 
 url = "https://api.linximpulse.com/engage/search/v3/hotsites"
 
