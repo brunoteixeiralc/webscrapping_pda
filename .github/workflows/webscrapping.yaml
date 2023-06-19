@@ -1,7 +1,8 @@
 name: run ws_pda.py
 on:
   schedule:
-    - cron: '0 */4 * * *'
+    - cron: '*/5 * * * *'
+    # - cron: '0 */4 * * *'
 jobs:
   run_schedule:
     runs-on: ubuntu-latest
