@@ -2,7 +2,7 @@ name: run ws_pda.py
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/3 * * * *'
+    - cron: '*/5 * * * *'
     # - cron: '0 */4 * * *'
 env:
     LANG: "pt_BR.UTF-8"
