@@ -1,12 +1,21 @@
 name: run ws_pda.py
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/3 * * * *'
     # - cron: '0 */4 * * *'
+env:
+    LANG: "pt_BR.UTF-8"
 jobs:
   run_schedule:
     runs-on: ubuntu-latest
     steps:
+      - name: pt_BR.UTF-8
+        run: |
+          sudo locale-gen pt_BR.UTF-8
+          sudo update-locale LANG=pt_BR.UTF-8
+      - name: date
+        run: |
+          date
       - name: check conteudo repositorio
         uses: actions/checkout@v3
       - name: instalar python
