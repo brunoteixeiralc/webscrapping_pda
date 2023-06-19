@@ -1,5 +1,6 @@
 name: run ws_pda.py
 on:
+  workflow_dispatch:
   schedule:
     - cron: '*/3 * * * *'
     # - cron: '0 */4 * * *'
