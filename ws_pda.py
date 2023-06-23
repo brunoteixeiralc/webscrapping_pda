@@ -5,6 +5,7 @@ import re
 import ws_sendgrid
 import ws_telegram_bot
 import ws_product_enum
+from decouple import config
 
 locale.setlocale(locale.LC_ALL, '')
 
@@ -48,7 +49,7 @@ for i in json_res["products"]:
     match = re.search(r'\b(\d+)\b', discount)
     if match:
         discount_regex = int(match.group(0))
-        if discount_regex >= 45:
+        if discount_regex >= int(config('DISCOUNT_VARIABLE')):
             res_alert.append({"name": i["name"],
                 "discount": discount,
                 "price": i["price"],

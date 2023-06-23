@@ -44,7 +44,7 @@ def send_to_telegram_alert(res):
     try:
         for res_alert in res:
             response = requests.post(apiURL, json={'chat_id': chatID, 'text': "🚨🚨🚨🚨 " + res_alert["name"] + " 🚨🚨🚨🚨" +
-                                                    "\n📉 " + "Achamos esse produto acima com um desconto acima de 45%. APROVEITEM!!!" + " 📉" +
+                                                    "\n📉 " + "Achamos esse produto acima com um desconto acima de " + config('DISCOUNT_VARIABLE') + "%. APROVEITEM!!!" + " 📉" +
                                                     "\n🛑 " + "Verifiquem o preço com os links acima." + " 🛑" , 'disable_notification': False}
                                     )
             print(response.text)
