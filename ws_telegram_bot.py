@@ -34,6 +34,25 @@ def send_to_telegram(res):
         print(e)
         
     print('Mensagens enviadas')
+    
+def send_to_telegram_alert(res):
+
+    apiToken = config('API_TELEGRAM')
+    chatID = config('CHAT_ID_TELEGRAM')
+    apiURL = f'https://api.telegram.org/bot{apiToken}/sendMessage'
+
+    try:
+        for res_alert in res:
+            response = requests.post(apiURL, json={'chat_id': chatID, 'text': "🚨🚨🚨🚨 " + res_alert["name"] + " 🚨🚨🚨🚨" +
+                                                    "\n📉 " + "Achamos esse produto acima com um desconto acima de 45%. APROVEITEM!!!" + " 📉" +
+                                                    "\n🛑 " + "Verifiquem o preço com os links acima." + " 🛑" , 'disable_notification': False}
+                                    )
+            print(response.text)
+        
+    except Exception as e:
+        print(e)
+        
+    print('Mensagens de alerta enviadas')
 
 def send_to_document_telegram(data, fileName):
     

@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 import locale
+import re
 import ws_sendgrid
 import ws_telegram_bot
 import ws_product_enum
@@ -28,6 +29,8 @@ json_res = response.json()
 
 res = []
 
+res_alert = []
+
 fileName = ws_product_enum.FileName.CERVEJA_ARTESANAL.value
 
 for i in json_res["products"]:
@@ -36,6 +39,17 @@ for i in json_res["products"]:
         discount = i["skus"][0]["specs"]["desconto"][0]
         
     res.append({"name": i["name"],
+                "discount": discount,
+                "price": i["price"],
+                "old_price": i["oldPrice"],
+                "status": i["status"],
+                "url_item": i["url"]})
+    
+    match = re.search(r'\b(\d+)\b', discount)
+    if match:
+        discount_regex = int(match.group(0))
+        if discount_regex >= 45:
+            res_alert.append({"name": i["name"],
                 "discount": discount,
                 "price": i["price"],
                 "old_price": i["oldPrice"],
@@ -51,3 +65,6 @@ data = ws_sendgrid.send_email(df, res)
 ws_telegram_bot.send_to_telegram(res)
 
 ws_telegram_bot.send_to_document_telegram(data, fileName.encode("utf-8"))
+
+if len(res_alert) != 0:
+    ws_telegram_bot.send_to_telegram_alert(res_alert)
