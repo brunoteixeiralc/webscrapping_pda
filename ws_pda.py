@@ -11,7 +11,7 @@ locale.setlocale(locale.LC_ALL, '')
 
 url = "https://api.linximpulse.com/engage/search/v3/hotsites"
 
-querystring = {"apikey":"paodeacucar","origin":"https://www.paodeacucar.com","page":"1","resultsPerPage":"12","name":ws_product_enum.Product.CERVEJA_ARTESANAL.value ,"salesChannel":["461","catalogmkp"],"sortBy":"descDiscount","filter":"d:3718:3719"}
+querystring = {"apikey":"paodeacucar","origin":"https://www.paodeacucar.com","page":"1","resultsPerPage":"24","name":ws_product_enum.Product.CERVEJA_ARTESANAL.value ,"salesChannel":["461","catalogmkp"],"sortBy":"descDiscount","filter":"d:3718:3719"}
 
 payload = ""
 headers = {
