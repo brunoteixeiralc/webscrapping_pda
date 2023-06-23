@@ -3,12 +3,13 @@ import pandas as pd
 import locale
 import ws_sendgrid
 import ws_telegram_bot
+import ws_product_enum
 
 locale.setlocale(locale.LC_ALL, '')
 
 url = "https://api.linximpulse.com/engage/search/v3/hotsites"
 
-querystring = {"apikey":"paodeacucar","origin":"https://www.paodeacucar.com","page":"1","resultsPerPage":"12","name":"semanacompleta_cervejasespeciais","salesChannel":["461","catalogmkp"],"sortBy":"descDiscount","filter":"d:3718:3719"}
+querystring = {"apikey":"paodeacucar","origin":"https://www.paodeacucar.com","page":"1","resultsPerPage":"12","name":ws_product_enum.Product.CERVEJA_ARTESANAL.value ,"salesChannel":["461","catalogmkp"],"sortBy":"descDiscount","filter":"d:3718:3719"}
 
 payload = ""
 headers = {
@@ -27,6 +28,8 @@ json_res = response.json()
 
 res = []
 
+fileName = ws_product_enum.FileName.CERVEJA_ARTESANAL.value
+
 for i in json_res["products"]:
     discount = "Same price" 
     if "desconto" in i["skus"][0]["specs"]:
@@ -41,10 +44,10 @@ for i in json_res["products"]:
     
 df = pd.json_normalize(res)
 df = pd.DataFrame(df) 
-df.to_csv("desc_pda_cerva.csv", encoding="utf-8", index=False, sep=";")
+df.to_csv(fileName, encoding="utf-8", index=False, sep=";")
 
 data = ws_sendgrid.send_email(df, res)
 
 ws_telegram_bot.send_to_telegram(res)
 
-ws_telegram_bot.send_to_document_telegram(data)
+ws_telegram_bot.send_to_document_telegram(data, fileName.encode("utf-8"))
