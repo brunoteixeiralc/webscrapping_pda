@@ -63,6 +63,8 @@ df.to_csv(fileName, encoding="utf-8", index=False, sep=";")
 
 data = ws_sendgrid.send_email(df, res)
 
+ws_telegram_bot.send_to_telegram_day_time()
+
 ws_telegram_bot.send_to_telegram(res)
 
 ws_telegram_bot.send_to_document_telegram(data, fileName.encode("utf-8"))

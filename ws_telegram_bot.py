@@ -4,6 +4,7 @@ import os
 import hashlib
 import tempfile
 from decouple import config
+from datetime import datetime
 
 def send_to_telegram(res):
 
@@ -53,6 +54,21 @@ def send_to_telegram_alert(res):
         print(e)
         
     print('Mensagens de alerta enviadas')
+    
+def send_to_telegram_day_time():
+
+    apiToken = config('API_TELEGRAM')
+    chatID = config('CHAT_ID_TELEGRAM')
+    apiURL = f'https://api.telegram.org/bot{apiToken}/sendMessage'
+
+    try:
+        response = requests.post(apiURL, json={'chat_id': chatID, 'text': "🗓 " + datetime.today().strftime("%d/%m/%Y %H:%M:%S"), 'disable_notification': False})
+        print(response.text)
+        
+    except Exception as e:
+        print(e)
+        
+    print('Data e horário de hoje enviado')
 
 def send_to_document_telegram(data, fileName):
     
