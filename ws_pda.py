@@ -71,7 +71,7 @@ df.to_csv(fileName, encoding="utf-8", index=False, sep=";")
 res_top3 = res[:3]
 ws_mongo.insert_update_best_price_products(res_top3)
 
-data = ws_sendgrid.send_email(df, res)
+data = ws_sendgrid.send_email(df, res, ws_product_enum.EmailBody.CERVEJA_ARTESANAL.value)
 
 ws_telegram_bot.send_to_telegram_day_time()
 

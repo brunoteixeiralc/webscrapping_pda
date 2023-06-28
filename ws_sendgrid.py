@@ -7,7 +7,7 @@ from sendgrid.helpers.mail import (
 from io import BytesIO
 from decouple import config
 
-def send_email(df, res):
+def send_email(df, res, product_type):
     
     contentEmailBody1 = res[0]["name"] + " , Preço com desc: " + locale.currency(res[0]["price"], grouping=True, symbol=False) + " , Preço normal: " + locale.currency(res[0]["old_price"], grouping=True, symbol=False)
     contentEmailBody2 = res[1]["name"] + " , Preço com desc: " + locale.currency(res[1]["price"], grouping=True, symbol=False) + " , Preço normal: " + locale.currency(res[1]["old_price"], grouping=True, symbol=False)
@@ -22,14 +22,14 @@ def send_email(df, res):
     attachment = Attachment()
     attachment.file_content = FileContent(encoded)
     attachment.file_type = FileType('text/csv')
-    attachment.file_name = FileName('desc_pda_cerva.csv')
+    attachment.file_name = FileName('Descontos_' + product_type + '.csv')
     attachment.disposition = Disposition('attachment')
     
     sg = sendgrid.SendGridAPIClient(api_key=config('SENDGRID_API_KEY'))
     from_email = Email("brunoteixeiralc@gmail.com")  # Change to your verified sender
     to_email = To("brunoteixeiralc@gmail.com")
-    subject = "Descontos Cervejas Artesanais - PDA"
-    content = Content("text/plain", "Segue em anexo as 12 cervejas artesanais com maior desconto no PDA\n\n" + "TOP 3 DE DESCONTO\n\n" +
+    subject = "Descontos " + product_type +  " - PDA"
+    content = Content("text/plain", "Segue em anexo os 24 itens com maior desconto no PDA\n\n" + "TOP 3 DE DESCONTO\n\n" +
                       str(contentEmailBody1) + 
                       "\n" + str(contentEmailBody2) + 
                       "\n" + str(contentEmailBody3) + "\n"
