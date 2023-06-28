@@ -10,7 +10,7 @@ class Product(Enum):
     
 class FileName(Enum):
     CERVEJA_ARTESANAL = "descontos_cervejas_artesanais"
-    DESTILADOS = "descontos_destilados_artesanais"
+    DESTILADOS = "descontos_destilados"
     VINHOS = "descontos_vinhos_artesanais"
     ENERGETICOS = "descontos_energeticos_artesanais"
     FRALDAS = "descontos_fraldas_artesanais"

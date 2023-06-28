@@ -3,4 +3,4 @@
 .env
 __pycache__/
 *.py[cod]
-descontos_cervejas_artesanais
+descontos_*

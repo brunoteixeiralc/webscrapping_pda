@@ -29,7 +29,7 @@ jobs:
         uses: actions/setup-python@v4
       - name: instalar os pacotes do requirements.txt
         run: python -m pip install pip install -r requirements.txt
-      - name: executar arquivo de scrapping
+      - name: executar arquivo de scrapping draft beer
         env:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           API_TELEGRAM: ${{ secrets.API_TELEGRAM }}
@@ -37,3 +37,11 @@ jobs:
           URI: ${{ secrets.URI }}
           DISCOUNT_VARIABLE: ${{ vars.DISCOUNT_VARIABLE }}
         run: python ws_pda.py
+      - name: executar arquivo de scrapping distilled
+        env:
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          API_TELEGRAM: ${{ secrets.API_TELEGRAM }}
+          CHAT_ID_TELEGRAM: ${{ secrets.CHAT_ID_TELEGRAM }}
+          URI: ${{ secrets.URI }}
+          DISCOUNT_VARIABLE: ${{ vars.DISCOUNT_VARIABLE }}
+        run: python ws_pda_distilled.py
