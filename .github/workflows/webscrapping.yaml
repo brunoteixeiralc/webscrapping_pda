@@ -23,8 +23,6 @@ jobs:
           date
       - name: check conteudo repositorio
         uses: actions/checkout@v3
-      - name: 🔎 Check IP
-        run: curl https://api.ipify.org
       - name: instalar python
         uses: actions/setup-python@v4
       - name: instalar os pacotes do requirements.txt
