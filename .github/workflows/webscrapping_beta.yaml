@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   schedule:
     # - cron: '*/5 * * * *'
-    - cron: '0 */4 * * *'
+    - cron: '0 */2 * * *'
 env:
     LANG: "pt_BR.UTF-8"
 jobs:
