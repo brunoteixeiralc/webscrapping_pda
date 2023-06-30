@@ -46,7 +46,7 @@ def send_to_telegram_alert(res):
         for res_alert in res:
             response = requests.post(apiURL, json={'chat_id': chatID, 'text': "🚨🚨🚨🚨 " + res_alert["name"] + " 🚨🚨🚨🚨" +
                                                     "\n📉 " + "Achamos esse produto acima com um desconto de " + str(res_alert["discount_int"]) + "%. APROVEITEM!!!" + " 📉" +
-                                                    "\n🛑 " + "Verifiquem o preço com os links acima." + " 🛑" , 'disable_notification': False}
+                                                    "\n🛑 " + res_alert["url_item"] + " 🛑" , 'disable_notification': False}
                                     )
             print(response.text)
         
@@ -62,7 +62,7 @@ def send_to_telegram_day_time():
     apiURL = f'https://api.telegram.org/bot{apiToken}/sendMessage'
 
     try:
-        response = requests.post(apiURL, json={'chat_id': chatID, 'text': "🗓 " + datetime.today().strftime("%d/%m/%Y %H:%M:%S"), 'disable_notification': False})
+        response = requests.post(apiURL, json={'chat_id': chatID, 'text': "🗓 " + datetime.today().strftime("%d/%m/%Y %H:%M:%S"), 'disable_notification': True})
         print(response.text)
         
     except Exception as e:

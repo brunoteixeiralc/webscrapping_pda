@@ -1,0 +1,35 @@
+name: run ws_pda_all_sales.py
+on:
+  workflow_dispatch:
+  schedule:
+    # - cron: '*/5 * * * *'
+    - cron: '0 */4 * * *'
+env:
+    LANG: "pt_BR.UTF-8"
+jobs:
+  run_schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: pt_BR.UTF-8
+        run: |
+          sudo locale-gen pt_BR.UTF-8
+          sudo update-locale LANG=pt_BR.UTF-8
+      - name: Configurar fuso horário
+        run: |
+          sudo ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+          echo "America/Sao_Paulo" | sudo tee /etc/timezone
+      - name: date
+        run: |
+          date
+      - name: check conteudo repositorio
+        uses: actions/checkout@v3
+      - name: instalar python
+        uses: actions/setup-python@v4
+      - name: instalar os pacotes do requirements.txt
+        run: python -m pip install pip install -r requirements.txt
+      - name: executar arquivo de scrapping draft beer
+        env:
+          API_TELEGRAM: ${{ secrets.API_TELEGRAM }}
+          CHAT_ID_TELEGRAM_BETA: ${{ secrets.CHAT_ID_TELEGRAM_BETA }}
+          DISCOUNT_VARIABLE: ${{ vars.DISCOUNT_VARIABLE }}
+        run: python ws_pda_all_sales.py
