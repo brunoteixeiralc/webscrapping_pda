@@ -30,6 +30,6 @@ jobs:
       - name: executar arquivo de scrapping draft beer
         env:
           API_TELEGRAM: ${{ secrets.API_TELEGRAM }}
-          CHAT_ID_TELEGRAM_BETA: ${{ secrets.CHAT_ID_TELEGRAM_BETA }}
+          CHAT_ID_TELEGRAM: ${{ secrets.CHAT_ID_TELEGRAM_BETA }}
           DISCOUNT_VARIABLE: ${{ vars.DISCOUNT_VARIABLE }}
         run: python ws_pda_all_sales.py
