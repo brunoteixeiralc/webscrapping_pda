@@ -45,39 +45,41 @@ for i in json_res["products"]:
         match = re.search(r'\b(\d+)\b', discount)
         if match:
             discount_int = int(match.group(0))
-        
-    res.append({"id": i["id"],
-                "name": i["name"],
-                "discount": discount,
-                "discount_int": discount_int,
-                "price": i["price"],
-                "old_price": i["oldPrice"],
-                "status": i["status"],
-                "url_item": i["url"]})
-    
-    if discount_int >= int(config('DISCOUNT_VARIABLE')):
-        res_alert.append({"name": i["name"],
-            "discount": discount,
-            "discount_int": discount_int,
-            "price": i["price"],
-            "old_price": i["oldPrice"],
-            "status": i["status"],
-            "url_item": i["url"]})
-    
-df = pd.json_normalize(res)
-df = pd.DataFrame(df) 
-df.to_csv(fileName, encoding="utf-8", index=False, sep=";")
+     
+        if i["status"] == "AVAILABLE" and discount_int != 0:    
+            res.append({"id": i["id"],
+                        "name": i["name"],
+                        "discount": discount,
+                        "discount_int": discount_int,
+                        "price": i["price"],
+                        "old_price": i["oldPrice"],
+                        "status": i["status"],
+                        "url_item": i["url"]})
+            
+            if discount_int >= int(config('DISCOUNT_VARIABLE')):
+                res_alert.append({"name": i["name"],
+                    "discount": discount,
+                    "discount_int": discount_int,
+                    "price": i["price"],
+                    "old_price": i["oldPrice"],
+                    "status": i["status"],
+                    "url_item": i["url"]})
 
-res_top3 = res[:3]
-ws_mongo.insert_update_best_price_products(res_top3)
+if len(res) != 0:   
+    df = pd.json_normalize(res)
+    df = pd.DataFrame(df) 
+    df.to_csv(fileName, encoding="utf-8", index=False, sep=";")
 
-data = ws_sendgrid.send_email(df, res, ws_product_enum.EmailBody.CERVEJA_ARTESANAL.value)
+    res_top3 = res[:3]
+    ws_mongo.insert_update_best_price_products(res_top3)
 
-ws_telegram_bot.send_to_telegram_day_time()
+    data = ws_sendgrid.send_email(df, res, ws_product_enum.EmailBody.CERVEJA_ARTESANAL.value)
 
-ws_telegram_bot.send_to_telegram(res)
+    ws_telegram_bot.send_to_telegram_day_time()
 
-ws_telegram_bot.send_to_document_telegram(data, fileName.encode("utf-8"))
+    ws_telegram_bot.send_to_telegram(res)
+
+    ws_telegram_bot.send_to_document_telegram(data, fileName.encode("utf-8"))
 
 if len(res_alert) != 0:
     ws_telegram_bot.send_to_telegram_alert(res_alert)
