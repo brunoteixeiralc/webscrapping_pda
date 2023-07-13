@@ -9,10 +9,13 @@ from decouple import config
 
 def send_email(df, res, product_type):
     
-    contentEmailBody1 = res[0]["name"] + " , Preço com desc: " + locale.currency(res[0]["price"], grouping=True, symbol=False) + " , Preço normal: " + locale.currency(res[0]["old_price"], grouping=True, symbol=False)
-    contentEmailBody2 = res[1]["name"] + " , Preço com desc: " + locale.currency(res[1]["price"], grouping=True, symbol=False) + " , Preço normal: " + locale.currency(res[1]["old_price"], grouping=True, symbol=False)
-    contentEmailBody3 = res[2]["name"] + " , Preço com desc: " + locale.currency(res[2]["price"], grouping=True, symbol=False) + " , Preço normal: " + locale.currency(res[2]["old_price"], grouping=True, symbol=False)
+    contentsEmailBody = []
     
+    for r in res:
+        contentEmailBody = r["name"] + " , Preço com desc: " + locale.currency(r["price"], grouping=True, symbol=False) + " , Preço normal: " + locale.currency(r["old_price"], grouping=True, symbol=False)
+        # contentEmailBody2 = res[1]["name"] + " , Preço com desc: " + locale.currency(res[1]["price"], grouping=True, symbol=False) + " , Preço normal: " + locale.currency(res[1]["old_price"], grouping=True, symbol=False)
+        # contentEmailBody3 = res[2]["name"] + " , Preço com desc: " + locale.currency(res[2]["price"], grouping=True, symbol=False) + " , Preço normal: " + locale.currency(res[2]["old_price"], grouping=True, symbol=False)
+        contentsEmailBody.append(contentEmailBody)
     buffer = BytesIO()
     df.to_csv(buffer);
     buffer.seek(0)
@@ -29,11 +32,7 @@ def send_email(df, res, product_type):
     from_email = Email("brunoteixeiralc@gmail.com")  # Change to your verified sender
     to_email = To("brunoteixeiralc@gmail.com")
     subject = "Descontos " + product_type +  " - PDA"
-    content = Content("text/plain", "Segue em anexo os 24 itens com maior desconto no PDA\n\n" + "TOP 3 DE DESCONTO\n\n" +
-                      str(contentEmailBody1) + 
-                      "\n" + str(contentEmailBody2) + 
-                      "\n" + str(contentEmailBody3) + "\n"
-                      ) 
+    content = Content("text/plain", "Segue em anexo os itens com maior desconto no PDA\n\n" + "TOP 3 DE DESCONTO\n\n".join([item + '\n' for item in contentsEmailBody]) + "\n" )
     mail = Mail(from_email, to_email, subject, content)
     mail.attachment = attachment
 
